@@ -29,7 +29,7 @@ public class Book {
     private int noOfPages;
     private int price;
     private LocalDate publishDate;
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     @JoinColumn
     @ManyToOne

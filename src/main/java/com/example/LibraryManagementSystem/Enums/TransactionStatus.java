@@ -1,5 +1,7 @@
 package com.example.LibraryManagementSystem.Enums;
 
 public enum TransactionStatus {
-    SUCCESS
+    SUCCESS,
+    FAILURE,
+    ONGOING
 }

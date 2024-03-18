@@ -1,10 +1,9 @@
 package com.example.LibraryManagementSystem.Controllers;
 
+import com.example.LibraryManagementSystem.Requests.LinkStudentAndCardRequest;
 import com.example.LibraryManagementSystem.Services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("card")
@@ -18,5 +17,12 @@ public class LibraryCardController {
         String result = cardService.generateNewCard();
         return result;
     }
+
+    @PutMapping("/linkStudentAndCard")
+    public String linkStudentAndCard(@RequestBody LinkStudentAndCardRequest linkStudentAndCardRequest){
+        String result = cardService.linkStudentAndCard(linkStudentAndCardRequest);
+        return result;
+    }
+
 
 }

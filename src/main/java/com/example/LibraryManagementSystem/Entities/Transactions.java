@@ -7,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "transactions")
@@ -24,7 +26,8 @@ public class Transactions {
     @Enumerated(value = EnumType.STRING)
     private TransactionStatus transactionStatus;
 
-    private LocalDate createdOn;
+    @CreatedDate
+    private Date createdOn;
     private int fineAmount;
 
     @Enumerated(value = EnumType.STRING)
