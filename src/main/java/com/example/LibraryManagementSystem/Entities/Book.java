@@ -1,11 +1,14 @@
 package com.example.LibraryManagementSystem.Entities;
 
-import com.example.LibraryManagementSystem.Enums.Genre;
+import com.example.LibraryManagementSystem.Enums.BookGenre;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,28 +18,24 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId;
 
-    @Column(unique = true)
     private String bookName;
-
     @Enumerated(value = EnumType.STRING)
-    private Genre bookGenre;
-
+    private BookGenre bookGenre;
     private int noOfPages;
-
     private int price;
-
-    private Date publishDate;
-
-    private Boolean isAvailable;
+    private LocalDate publishDate;
+    private boolean isAvailable;
 
     @JoinColumn
     @ManyToOne
     private Author author;
 
     @OneToMany(mappedBy = "book",cascade = CascadeType.ALL)
-    public List<Transaction> transactionList = new ArrayList<>();
+    private List<Transactions> transactionList = new ArrayList<>();
+
 }

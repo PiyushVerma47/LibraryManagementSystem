@@ -16,27 +16,26 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction {
+public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String transactionId;
 
+    @Enumerated(value = EnumType.STRING)
     private TransactionStatus transactionStatus;
 
-
     private LocalDate createdOn;
-
     private int fineAmount;
 
+    @Enumerated(value = EnumType.STRING)
     private TransactionType transactionType;
-
 
     @JoinColumn
     @ManyToOne
     private LibraryCard libraryCard;
 
-
     @JoinColumn
     @ManyToOne
     private Book book;
+
 }

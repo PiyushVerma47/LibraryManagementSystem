@@ -1,4 +1,5 @@
 package com.example.LibraryManagementSystem.Enums;
 
-public enum Genre {
+public enum BookGenre {
+ ENGLISH
 }

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "authors")
 @Data
+@Table(name = "authors")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,10 +22,10 @@ public class Author {
     private int authorId;
 
     private String authorName;
-    private int age;
     private String emailId;
-    int noOfBooksWritten;
+    private int age;
+    private int noOfBooksWritten;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author" , cascade = CascadeType.ALL)
     private List<Book> bookList = new ArrayList<>();
 }
