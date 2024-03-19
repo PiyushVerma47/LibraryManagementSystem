@@ -8,6 +8,8 @@ import com.example.LibraryManagementSystem.Requests.AddBookRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BookService {
 
@@ -16,8 +18,14 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
-    public String addBook(AddBookRequest addBookRequest){
-        Author author = authorRepository.findById(addBookRequest.getAuthorId()).get();
+    public String addBook(AddBookRequest addBookRequest) throws Exception{
+//        Author author = authorRepository.findById(addBookRequest.getAuthorId()).get();
+
+        Optional<Author> optionalAuthor = authorRepository.findById(addBookRequest.getAuthorId());
+        if(optionalAuthor.isEmpty()){
+            throw new Exception("Invalid author Id");
+        }
+        Author author = optionalAuthor.get();
 
         Book book = Book.builder()
                 .bookName(addBookRequest.getBookName())

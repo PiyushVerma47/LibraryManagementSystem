@@ -31,24 +31,43 @@ public class TransactionService {
     private BookRepository bookRepository;
 
     public String issueBook(IssueBookRequest issueBookRequest) throws Exception{
-        LibraryCard card = cardRepository.findById(issueBookRequest.getCardId()).get();
-        Book book = bookRepository.findById(issueBookRequest.getBookId()).get();
 
-        System.out.println("iN TRANSACTION");
-        LocalDate date = LocalDate.parse("2024-01-05");
+        Optional<LibraryCard> optionalCard = cardRepository.findById(issueBookRequest.getCardId());
+        if(optionalCard.isEmpty()){
+            throw new Exception("Invalid card Id entered");
+        }
+        LibraryCard card = optionalCard.get();
+
+        Optional<Book> optionalBook = bookRepository.findById(issueBookRequest.getBookId());
+        if(optionalBook.isEmpty()){
+            throw new Exception("Invalid book Id entered");
+        }
+        Book book = optionalBook.get();
+
+
+        Transactions transaction = new Transactions();
+        transaction.setTransactionStatus(TransactionStatus.ONGOING);
+        transaction.setTransactionType(TransactionType.ISSUED);
+
+//        LibraryCard card = cardRepository.findById(issueBookRequest.getCardId()).get();
+//        Book book = bookRepository.findById(issueBookRequest.getBookId()).get();
+
 
         Student student = card.getStudent();
 
         if(!book.getIsAvailable()){
+            transaction.setTransactionStatus(TransactionStatus.FAILURE);
+            transaction = transactionRepository.save(transaction);
             throw new Exception("Book unavailable");
-
         }
 
         if(card.getNoOfBooksIssued() >= 3){
+            transaction.setTransactionStatus(TransactionStatus.FAILURE);
+            transaction = transactionRepository.save(transaction);
             throw new Exception("Maximum number of books already issued to this card");
         }
 
-        Transactions transaction = Transactions.builder()
+         transaction = Transactions.builder()
                 .book(book)
                 .transactionType(TransactionType.ISSUED)
                 .transactionStatus(TransactionStatus.SUCCESS)
@@ -66,14 +85,37 @@ public class TransactionService {
 
     }
 
-    public String returnBook(ReturnBookRequest returnBookRequest){
-        LibraryCard card = cardRepository.findById(returnBookRequest.getCardId()).get();
-        Book book = bookRepository.findById(returnBookRequest.getBookId()).get();
+    public String returnBook(ReturnBookRequest returnBookRequest) throws Exception{
+//        LibraryCard card = cardRepository.findById(returnBookRequest.getCardId()).get();
+//        Book book = bookRepository.findById(returnBookRequest.getBookId()).get();
+
+        Optional<LibraryCard> optionalCard = cardRepository.findById(returnBookRequest.getCardId());
+        if(optionalCard.isEmpty()){
+            throw new Exception("Invalid card Id entered");
+        }
+        LibraryCard card = optionalCard.get();
+
+        Optional<Book> optionalBook = bookRepository.findById(returnBookRequest.getBookId());
+        if(optionalBook.isEmpty()){
+            throw new Exception("Invalid book Id entered");
+        }
+        Book book = optionalBook.get();
+
+        Transactions transaction = new Transactions();
+        transaction.setTransactionType(TransactionType.RETURN);
+        transaction.setTransactionStatus(TransactionStatus.ONGOING);
+
+
+        if(card.getNoOfBooksIssued() == 0) {
+            transaction.setTransactionStatus(TransactionStatus.FAILURE);
+            transaction = transactionRepository.save(transaction);
+            throw new Exception("Currently no books issued have been issued to this card Id");
+        }
 
         card.setNoOfBooksIssued(card.getNoOfBooksIssued()-1);
         book.setIsAvailable(Boolean.TRUE);
 
-        Transactions transaction = Transactions.builder()
+        transaction = Transactions.builder()
                 .book(book)
                 .libraryCard(card)
                 .transactionType(TransactionType.RETURN)

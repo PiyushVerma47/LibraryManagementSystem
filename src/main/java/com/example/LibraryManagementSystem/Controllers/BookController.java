@@ -3,6 +3,8 @@ package com.example.LibraryManagementSystem.Controllers;
 import com.example.LibraryManagementSystem.Requests.AddBookRequest;
 import com.example.LibraryManagementSystem.Services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +18,13 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping("/addBook")
-    public String addBook(@RequestBody AddBookRequest addBookRequest){
-        String result = bookService.addBook(addBookRequest);
-        return result;
+    public ResponseEntity addBook(@RequestBody AddBookRequest addBookRequest){
+        try{
+            String result = bookService.addBook(addBookRequest);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
